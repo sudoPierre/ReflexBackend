@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ -f webhook.pid ]; then
-  kill $(cat webhook.pid)
-  rm webhook.pid
+if [ -f starter.pid ]; then
+  kill $(cat starter.pid)
+  rm starter.pid
   echo "webhook-reloader stopped."
 else
   echo "No PID file found. Is it running?"
