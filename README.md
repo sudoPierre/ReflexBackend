@@ -1,100 +1,86 @@
 # ReflexBackend
 
-**ReflexBackend** is a simple Python-based utility that listens to GitHub webhooks and automatically pulls, stops, and restarts your backend project every time a push is detected on a specific branch.
+**ReflexBackend** is a lightweight webhook listener that automatically updates and restarts your backend server when a `push` event is triggered on a specific GitHub branch.
 
 ---
 
-## ✅ Prerequisites
+## 📌 Requirements
 
-- A **clean machine or VM** with Python 3 installed (if not, it will be installed automatically).
-- **Port 9898 must be free** (or you must change it in `config.json`).
-- `git` must be installed.
+Make sure your environment meets the following conditions before starting:
+
+- A **clean machine or VM** (no service running on port `9898`, or update the port in `config.json`).
+- The **GitHub repository must already be cloned locally** on the machine.
+- **Git is installed** on the system.
+- The machine is **authenticated with GitHub** (via username/password or SSH key), especially if the repository is private.
+- A **GitHub webhook** must be created with the following settings:
+  - **URL**: `http://<your-ip>:9898/webhook`
+  - **Content type**: `application/json`
+  - **SSL**: disabled
+  - **Secret**: none
+  - **Events**: only `push`
+- If your machine is on a **local network**, you must configure **port forwarding** on your router to redirect traffic from port `9898` to the machine’s local IP.
 
 ---
 
-## 🛠 Installation
+## ⚙️ Setup
 
-1. **Clone the repository**:
-
+1. **Clone ReflexBackend** to your machine:
    ```bash
    git clone https://github.com/sudoPierre/ReflexBackend
    cd ReflexBackend
    ```
 
-2. **Configure the project**: Edit `config.json` and set the following fields:
-
-   - `branch`: the branch to listen for (e.g. "main").
-   - `backend_path`: the path to your local repo (e.g. "~/MyProject").
-   - `port`: the port ReflexBackend should listen on (default is `9898`).
-   - `stop_commands`: an array of shell commands to stop your backend.
-   - `start_commands`: an array of shell commands to start your backend.
+2. **Fill in `config.json`** with the following information:
+   - Branch to monitor.
+   - Path to your local project folder.
+   - Port to listen on (default is 9898).
+   - Commands to stop and restart your backend (can be multiple).
 
 3. **Start the loader**:
-
    ```bash
    sudo bash ./start.sh
    ```
 
 ---
 
-## 📛 Stopping ReflexBackend
+## 🛑 Stop ReflexBackend
 
-To stop the webhook listener and background process:
-
+To stop the webhook listener:
 ```bash
 sudo bash ./stop.sh
 ```
 
 ---
 
-## 📁 Files Overview
-
-- `start.sh`: Installs dependencies, sets up the virtual environment, and starts the webhook listener.
-- `stop.sh`: Stops the background process using the stored PID.
-- `main.py`: The core Python script that handles webhook requests.
-- `config.json`: Configuration file with GitHub link, branch, port, and commands.
-
----
-
-## 📝 Example `config.json`
+## 🧪 Example `config.json`
 
 ```json
 {
-  // Branch to watch for webhook pushes
   "branch": "main",
-  
-  // Path to your local repo
   "backend_path": "path/to/my/backend",
-
-  // Port ReflexBackend will listen on
-  "port": 9898
-
-  // Commands to stop the current backend
-  "stop_commands": [
-    "pkill -f 'your-backend-process'"
-  ],
-
-  // Commands to start the backend
+  "port": 9898,
   "start_commands": [
-    "cd yourproject",
-    "python3 app.py"
+    "echo Starting backend...",
+    "cd path/to/my/backend",
+    "nohup python3 main.py &"
   ],
+  "stop_commands": [
+    "echo Stopping backend...",
+    "pkill -f my-backend"
+  ]
 }
 ```
 
 ---
 
-## 🚀 Use Case
+## 📂 Notes
 
-Use this tool if you want your backend server to:
-
-- Automatically update after each push to GitHub.
-- Be restarted with custom stop/start logic.
-- Run on a lightweight VM or server without Docker or CI/CD tools.
+- All logs are written to `webhook.log`.
+- If you change the listening port, make sure to also update the webhook on GitHub and any port forwarding on your router.
+- `start.sh` creates a virtual environment and installs dependencies automatically.
 
 ---
 
-## 🛠 License
+## ✅ License
 
-MIT – Feel free to use and adapt.
-
+MIT – Use it freely, modify it, and contribute if you'd like!
