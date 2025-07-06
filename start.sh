@@ -24,7 +24,7 @@ fi
 if ! python3 -m venv --help &> /dev/null; then
   echo "'venv' module is missing. Attempting to install..."
   if command -v apt &> /dev/null; then
-    sudo apt install -y python3-venv
+    sudo apt install -y python3.10-venv
   else
     echo "Please install the 'python3-venv' package manually."
     exit 1
