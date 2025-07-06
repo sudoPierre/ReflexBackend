@@ -26,7 +26,7 @@ Make sure your environment meets the following conditions before starting:
 
 1. **Clone ReflexBackend** to your machine:
    ```bash
-   git clone https://github.com/sudoPierre/ReflexBackend
+   git clone https://github.com/sudoPierre/ReflexBackend.git
    cd ReflexBackend
    ```
 
