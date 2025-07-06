@@ -1,0 +1,13 @@
+{
+  "repo_url": "https://github.com/myusername/myproject",
+  "branch": "main",
+  "start_commands": [
+    "echo Starting backend...",
+    "cd my-backend",
+    "nohup python3 main.py &"
+  ],
+  "stop_commands": [
+    "echo Stopping backend...",
+    "pkill -f my-backend"
+  ]
+}
