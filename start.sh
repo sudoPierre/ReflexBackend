@@ -45,6 +45,6 @@ pip install -r requirements.txt
 
 # 6. Run the Python script in the background and save its PID
 echo "Starting webhook-reloader..."
-nohup python main.py > webhook.log 2>&1 &
+sudo nohup python main.py > webhook.log 2>&1 &
 echo $! > webhook.pid
 echo "webhook-reloader started (PID $(cat webhook.pid))"
