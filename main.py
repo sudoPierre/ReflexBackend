@@ -14,6 +14,7 @@ with open(os.path.join(path, "config.json")) as config_file:
 app = Flask(__name__)
 startCommands = config["start_commands"]
 stopCommands = config["stop_commands"]
+port = config["port"]
 pathServer = config["backend_path"]
 branch = config["branch"]
 
@@ -57,4 +58,4 @@ def webhook():
         return 'Not ' + branch + ' branch', 200
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=9898)
+    app.run(host='0.0.0.0', port=port)

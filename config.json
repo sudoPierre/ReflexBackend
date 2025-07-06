@@ -1,7 +1,7 @@
 {
-  "repo_url": "https://github.com/myusername/myproject",
   "branch": "main",
   "backend_path": "my-backend",
+  "port": 9898,
   "start_commands": [
     "echo Starting backend...",
     "cd my-backend",
