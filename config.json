@@ -1,10 +1,10 @@
 {
   "branch": "main",
-  "backend_path": "my-backend",
+  "backend_path": "path/to/my/backend",
   "port": 9898,
   "start_commands": [
     "echo Starting backend...",
-    "cd my-backend",
+    "cd path/to/my/backend",
     "nohup python3 main.py &"
   ],
   "stop_commands": [
