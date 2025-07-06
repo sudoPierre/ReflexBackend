@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -f starter.pid ]; then
-  kill $(cat starter.pid)
+  sudo kill $(cat starter.pid)
   rm starter.pid
   echo "webhook-reloader stopped."
 else

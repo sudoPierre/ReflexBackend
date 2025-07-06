@@ -47,6 +47,6 @@ pip install -r requirements.txt
 echo "Starting webhook-reloader..."
 touch starter.log
 sudo chmod 644 starter.log
-sudo nohup python3 main.py > starter.log 2>&1 &
+nohup python3 main.py > starter.log 2>&1 &
 echo $! > starter.pid
 echo "webhook-reloader started (PID $(cat starter.pid))"
