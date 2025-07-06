@@ -17,7 +17,7 @@
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/yourusername/ReflexBackend.git
+   git clone https://github.com/sudoPierre/ReflexBackend
    cd ReflexBackend
    ```
 
