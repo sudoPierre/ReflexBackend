@@ -19,7 +19,7 @@ pathServer = config["backend_path"]
 branch = config["branch"]
 
 def logger(status, content):
-    completePath = os.path.join(path, "commands.log")
+    completePath = os.path.join(path, "webhook.log")
     file = open(completePath, "r")
     currentContent = file.read()
     file.close()
@@ -39,12 +39,22 @@ def updateRepo():
         for cmd in startCommands:
             run(cmd)
             logger("ACTION", "Starting server with commands: " + str(startCommands))
+    except Exception as e:
+        logger("ERROR", f"Failed to start server: {e}")
+        return
+    try:
+        run(["git", "pull", "origin", branch])
+    except Exception as e:
+        logger("ERROR", f"Failed to update local repo: {e}")
+        return
+    try:
         for cmd in stopCommands:
             run(cmd)
             logger("ACTION", "Stopping server with commands: " + str(stopCommands))
     except Exception as e:
-        logger("ERROR", f"Failed to start server: {e}")
+        logger("ERROR", f"Failed to stop server: {e}")
         return
+    return
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
