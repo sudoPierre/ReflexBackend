@@ -38,7 +38,7 @@ Make sure your environment meets the following conditions before starting:
 
 3. **Start the loader**:
    ```bash
-   sudo bash ./start.sh
+   bash ./start.sh
    ```
 
 ---
@@ -47,7 +47,7 @@ Make sure your environment meets the following conditions before starting:
 
 To stop the webhook listener:
 ```bash
-sudo bash ./stop.sh
+bash ./stop.sh
 ```
 
 ---
