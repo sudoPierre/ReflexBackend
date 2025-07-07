@@ -32,30 +32,28 @@ def logger(status, content):
 
 def run(cmd):
     result = subprocess.run(cmd, check=True, capture_output=True, text=True, cwd=pathServer, shell=False)
+    cmd_str = ' '.join(cmd)
     if result.returncode == 0:
-        logger("INFO", f"Command '{' '.join(cmd)}' executed successfully.")
+        logger("INFO", f"Command '{cmd_str}' executed successfully.")
         return True
     else:
-        logger("ERROR", f"Command '{' '.join(cmd)}' failed with error: {result.stderr.strip()}")
+        logger("ERROR", f"Command '{cmd_str}' failed.")
         return False
 
 def startServer():
     for cmd in startCommands:
         cmd = cmd.split(" ")
         if run(cmd):
-            logger("INFO", f"Command '{cmd}' successfully executed")
+            return True
         else:
-            logger("ERROR", f"Failed to execute command '{cmd}'")
             return False
-    return True
 
 def stopServer():
     for cmd in stopCommands:
         cmd = cmd.split(" ")
         if run(cmd):
-            logger("INFO", f"Command '{cmd}' successfully executed")
+            return True
         else:
-            logger("ERROR", f"Failed to execute command '{cmd}'")
             return False
     return True
 
