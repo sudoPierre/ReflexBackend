@@ -1,6 +1,13 @@
 #!/bin/bash
 
-# 1. Check if python3 is installed
+# 1. Check if config.json is correctly configured
+if ! grep 'path/to/my/backend' config.json &> /dev/null;
+then
+  echo "Please configure config.json then restart the installation."
+  exit 1
+fi
+
+# 2. Check if python3 is installed
 if ! command -v python3 &> /dev/null; then
   echo "Python3 is not installed."
 
@@ -20,7 +27,7 @@ if ! command -v python3 &> /dev/null; then
   fi
 fi
 
-# 2. Check if the venv module is available
+# 3. Check if the venv module is available
 if ! python3 -m venv --help &> /dev/null; then
   echo "'venv' module is missing. Attempting to install..."
   if command -v apt &> /dev/null; then
@@ -31,19 +38,19 @@ if ! python3 -m venv --help &> /dev/null; then
   fi
 fi
 
-# 3. Create virtual environment if it doesn't exist
+# 4. Create virtual environment if it doesn't exist
 if [ ! -d "venv" ]; then
   echo "Creating virtual environment..."
   python3 -m venv venv
 fi
 
-# 4. Activate the virtual environment
+# 5. Activate the virtual environment
 source venv/bin/activate
 
-# 5. Install dependencies from requirements.txt
+# 6. Install dependencies from requirements.txt
 pip install -r requirements.txt
 
-# 6. Run the Python script in the background and save its PID
+# 7. Run the Python script in the background and save its PID
 echo "Starting webhook-reloader..."
 touch starter.log
 sudo chmod 644 starter.log
