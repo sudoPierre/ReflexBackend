@@ -32,11 +32,13 @@ def logger(status, content):
 
 def run(cmd):
     try:
-        logger("INFO", f"Command '{cmd[0]} {cmd[1]}' successfuly executed")
-        return subprocess.run(cmd, check=True, capture_output=True, text=True)
+        logger("INFO", f"Command '{cmd}' successfuly executed")
+        return subprocess.run(cmd, check=True, capture_output=True, text=True, cwd=pathServer, shell=True)
     except subprocess.CalledProcessError as e:
-        logger("WARNING", f"Failed to execute command '{cmd[0]} {cmd[1]}'.")
-    
+        logger("WARNING", f"Failed to execute command '{cmd}'.")
+        logger("ERROR", f"Error output: {e.stderr}")
+        return None
+
 def startServer():
     try:
         for cmd in startCommands:
