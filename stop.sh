@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -f starter.pid ]; then
+if [ -f rb.pid ]; then
   sudo kill $(cat rb.pid)
   sudo rm rb.pid
   sudo rm -f starter.log
