@@ -20,6 +20,9 @@ branch = config["branch"]
 
 def logger(status, content):
     completePath = os.path.join(path, "webhook.log")
+    if not os.path.exists(completePath):
+        with open(completePath, "w") as file:
+            file.write("Log file created.\n")
     file = open(completePath, "r")
     currentContent = file.read()
     file.close()
