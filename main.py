@@ -31,44 +31,46 @@ def logger(status, content):
     file.close()
 
 def run(cmd):
-    try:
-        return subprocess.run(cmd, check=True, capture_output=True, text=True, cwd=pathServer, shell=False)
-    except subprocess.CalledProcessError as e:
-        logger("ERROR", f"Error output: {e.stdout} while executing command: {cmd}")
-        return None
+    result = subprocess.run(cmd, check=True, capture_output=True, text=True, cwd=pathServer, shell=False)
+    if result.returncode == 0:
+        logger("INFO", f"Command '{' '.join(cmd)}' executed successfully.")
+        return True
+    else:
+        logger("ERROR", f"Command '{' '.join(cmd)}' failed with error: {result.stderr.strip()}")
+        return False
 
 def startServer():
-    try:
-        for cmd in startCommands:
-            cmd = cmd.split(" ")
-            if run(cmd):
-                logger("INFO", f"Command '{cmd}' successfuly executed")
-    except Exception as e:
-        logger("ERROR", f"Failed to start server: {e}")
-        return
-    return
+    for cmd in startCommands:
+        cmd = cmd.split(" ")
+        if run(cmd):
+            logger("INFO", f"Command '{cmd}' successfully executed")
+        else:
+            logger("ERROR", f"Failed to execute command '{cmd}'")
+            return False
+    return True
 
 def stopServer():
-    try:
-        for cmd in stopCommands:
-            cmd = cmd.split(" ")
-            if run(cmd):
-                logger("INFO", f"Command '{cmd}' successfuly executed")
-    except Exception as e:
-        logger("ERROR", f"Failed to stop server: {e}")
-        return
-    return
+    for cmd in stopCommands:
+        cmd = cmd.split(" ")
+        if run(cmd):
+            logger("INFO", f"Command '{cmd}' successfully executed")
+        else:
+            logger("ERROR", f"Failed to execute command '{cmd}'")
+            return False
+    return True
 
 def updateRepo():
-    try:
-        run(["git", "fetch", "origin", branch])
-        run(["git", "reset", "--hard", f"origin/{branch}"])
-        run(["git", "clean", "-fd"])
-        logger("ACTION", "Local repository updated to the latest commit on branch: " + branch)
-    except Exception as e:
-        logger("ERROR", f"Failed to update local repo: {e}")
-        return
-    return
+    if run(["git", "fetch", "origin", branch]):
+        if run(["git", "reset", "--hard", f"origin/{branch}"]):
+            if run(["git", "clean", "-fd"]):
+                logger("ACTION", "Local repository updated to the latest commit on branch: " + branch)
+                return True
+            else:
+                return False
+        else:
+            return False
+    else:
+        return False
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
