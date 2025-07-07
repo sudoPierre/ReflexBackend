@@ -33,8 +33,8 @@ def run(cmd):
         return subprocess.run(cmd, check=True, capture_output=True, text=True)
     except subprocess.CalledProcessError as e:
         logger("WARNING", f"Failed to execute command '{cmd[0]} {cmd[1]}'.")
-
-def updateRepo():
+    
+def startServer():
     try:
         for cmd in startCommands:
             run(cmd)
@@ -42,11 +42,9 @@ def updateRepo():
     except Exception as e:
         logger("ERROR", f"Failed to start server: {e}")
         return
-    try:
-        run(["git", "pull", "origin", branch])
-    except Exception as e:
-        logger("ERROR", f"Failed to update local repo: {e}")
-        return
+    return
+
+def stopServer():
     try:
         for cmd in stopCommands:
             run(cmd)
@@ -56,12 +54,32 @@ def updateRepo():
         return
     return
 
+def updateRepo():
+    try:
+        run(["git", "fetch", "origin", branch])
+        run(["git", "reset", "--hard", f"origin/{branch}"])
+        run(["git", "clean", "-fd"])
+        logger("ACTION", "Local repository updated to the latest commit on branch: " + branch)
+    except Exception as e:
+        logger("ERROR", f"Failed to update local repo: {e}")
+        return
+    return
+
 @app.route('/webhook', methods=['POST'])
 def webhook():
     payload = request.json
     if payload['ref'] == 'refs/heads/' + branch:
         logger("ACTION", "Push detected on " + branch + ". Pulling latest changes.")
-        updateRepo()
+        if stopServer():
+            if updateRepo():
+                if startServer():
+                    logger("INFO", "Server restarted successfully after push on " + branch + " branch.")
+            else:
+                logger("ERROR", "Failed to update repository.")
+                return 'Failed to update repository', 500
+        else:
+            logger("ERROR", "Failed to stop server before updating repository.")
+            return 'Failed to stop server', 500
         return 'OK', 200
     else:
         logger("INFO", "Push detected. Not on " + branch + " branch.")
