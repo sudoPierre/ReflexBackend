@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 1. Check if config.json is correctly configured
-if ! grep 'path/to/my/backend' config.json &> /dev/null;
+if grep 'path/to/my/backend' config.json &> /dev/null;
 then
   echo "Please configure config.json then restart the installation."
   exit 1
