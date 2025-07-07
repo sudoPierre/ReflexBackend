@@ -3,12 +3,11 @@
   "backend_path": "path/to/my/backend",
   "port": 9898,
   "start_commands": [
-    "echo Starting backend...",
-    "cd path/to/my/backend",
+    "sudo my-backend",
     "nohup python3 main.py &"
   ],
   "stop_commands": [
-    "echo Stopping backend...",
+    "sudo my-backend stop",
     "pkill -f my-backend"
   ]
 }
